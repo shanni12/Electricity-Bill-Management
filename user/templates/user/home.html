@@ -1,0 +1,27 @@
+{% extends "user/base.html" %}
+{% block content%}
+{%csrf_token%}
+{%if user.is_authenticated %}
+{%for bill in bills%}
+<div class="card" style="width: 90%">
+      <div class="card-body">
+            <h5 class="card-title">Bill Id - <strong>{{bill.id}}</strong></h5>
+            <h5 class="card-title">Units - <strong>{{bill.units}}</strong></h5>
+            <h6 class="card-text">Amount - <strong>{{bill.amount}}</strong></h6>
+            <p class="card-text">Generated on - <strong>{{bill.generated_on}}</strong></p>
+            {%if bill.status == "NOT PAID" %}
+            <a href="{% url 'transaction' bill_id=bill.id %}" class="card-link">Pay Bill</a>
+            <a class="card-link" href="{% url 'complaint' bill_id=bill.id%}">Complaint</a>
+            {%else%}
+             <p class="card-text">Paid on - <strong> {{bill.paid_on}} </strong> </p>
+             <p class="card-text">Paid through - <strong>{{bill.payment_mode}}</strong></p>
+            {%endif%}
+
+      </div>
+</div>
+{%endfor%}
+{%else%}
+<p>Already Have an account?<a class="nav-item nav-link" href="{% url 'login'%}">Login</a></p>
+<p>Don't have an account?<a class="nav-item nav-link" href="{% url 'register'%}">Register</a></p>
+{%endif%}
+{%endblock content %}

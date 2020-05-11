@@ -1,0 +1,36 @@
+{% extends "user/base.html" %}
+{% block content%}
+<div class="content-section">
+    <form method="POST">
+         {%csrf_token%}
+         <fieldset class="form-group">
+             <legend class="border-bottom mb-4">Payment</legend>
+             <div class="container">
+        
+                <br>
+                 <h5>Paying bill for - {{bill_id}}</h5>
+                <br>
+                <h5>Number of Units Consumed - {{ bill_units}}</h5>
+                <h5>Total Amount is - {{bill_amount}} </h5>
+                <label><b>Remarks</b></label>
+                <br>
+                <textarea type="text" placeholder="Enter remarks if Any" name="remarks"></textarea>
+                <select id="transaction_modes" name="transaction_mode">
+                    <option value="upi">UPI</option>
+                    <option value="credit">CREDIT CARD</option>
+                    <option value="debit">DEBIT CARD</option>
+                    
+                </select>
+                <br>
+                <br>
+                 <button class="btn btn-outline-info" type="submit">Pay</button>
+                  
+    
+              </div>
+             
+         </fieldset>
+         
+    </form>
+    
+</div>
+{%endblock content%}

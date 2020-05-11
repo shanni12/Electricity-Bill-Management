@@ -1,0 +1,29 @@
+{% extends "user/base.html" %}
+{% block content%}
+<div class="content-section">
+    <form method="POST">
+         {%csrf_token%}
+         <fieldset class="form-group">
+             <legend class="border-bottom mb-4">Complaint</legend>
+             <div class="container">
+        
+                <br>
+                 <h5>Raise Complaint for Bill - {{bill_id}}</h5>
+                <br>
+                <label><b>Issue</b></label>
+                <br>
+                <textarea type="text" placeholder="Enter Issue" name="issue" required></textarea>
+            
+                <br>
+                <br>
+                 <button class="btn btn-outline-info" type="submit">Submit</button>
+                  
+    
+              </div>
+             
+         </fieldset>
+         
+    </form>
+    
+</div>
+{%endblock content%}

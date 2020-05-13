@@ -3,7 +3,7 @@
 {%csrf_token%}
 {%if user.is_authenticated %}
 {%for bill in bills%}
-<div class="card" style="width: 90%">
+<div class="card">
       <div class="card-body">
             <h5 class="card-title">Bill Id - <strong>{{bill.id}}</strong></h5>
             <h5 class="card-title">Units - <strong>{{bill.units}}</strong></h5>

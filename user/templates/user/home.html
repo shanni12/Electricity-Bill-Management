@@ -5,16 +5,16 @@
 {%for bill in bills%}
 <div class="card">
       <div class="card-body">
-            <h5 class="card-title">Bill Id - <strong>{{bill.id}}</strong></h5>
+            <h5 class="card-title">Bill Id - <strong>{{bill.bill_id}}</strong></h5>
             <h5 class="card-title">Units - <strong>{{bill.units}}</strong></h5>
             <h6 class="card-text">Amount - <strong>{{bill.amount}}</strong></h6>
             <p class="card-text">Generated on - <strong>{{bill.generated_on}}</strong></p>
             {%if bill.status == "NOT PAID" %}
-            <a href="{% url 'transaction' bill_id=bill.id %}" class="card-link">Pay Bill</a>
-            <a class="card-link" href="{% url 'complaint' bill_id=bill.id%}">Complaint</a>
+            <a href="{% url 'transaction' bill_id=bill.bill_id %}" class="card-link">Pay Bill</a>
+            <a class="card-link" href="{% url 'complaint' bill_id=bill.bill_id%}">Complaint</a>
             {%else%}
-             <p class="card-text">Paid on - <strong> {{bill.paid_on}} </strong> </p>
-             <p class="card-text">Paid through - <strong>{{bill.payment_mode}}</strong></p>
+            <p class="card-text">Paid on - <strong> {{bill.paid_on}} </strong> </p>
+            <p class="card-text">Paid through - <strong>{{bill.payment_mode}}</strong></p>
             {%endif%}
 
       </div>

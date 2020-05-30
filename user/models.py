@@ -1,16 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin
+import uuid
 # Create your models here.
 
 
-
 class Bill(models.Model):
+
     bill_status_choices = [
         ('PAID', 'PAID'),
         ('NOT PAID', 'NOT PAID')
     ]
 
+    bill_id = models.UUIDField(primary_key=True, default=uuid.uuid4(),editable=False
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     units = models.IntegerField()
     amount = models.IntegerField()
@@ -19,9 +22,7 @@ class Bill(models.Model):
     remarks = models.CharField(max_length=300, null=True, blank=True)
     status = models.CharField(
         max_length=100, choices=bill_status_choices, default='NOT PAID')
-    payment_mode = models.CharField(max_length=300, blank=True, null=True)
-
-
+    payment_mode = models.CharField(max_length=300, blank=True, null=True,editable=False)
 
 
 class TransactionModels(models.Model):

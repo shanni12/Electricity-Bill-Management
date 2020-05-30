@@ -44,6 +44,13 @@ def home(request):
 
     return render(request, 'user/home.html', {'bills': bills})
 
+@login_required
+def view_complaints(request):
+
+    complaints = Complaint.objects.filter(user=request.user)
+
+    return render(request, 'user/view_complaint.html', {'complaints': complaints})
+
 
 def about(request):
     return render(request, 'user/about.html')
@@ -51,7 +58,7 @@ def about(request):
 
 @login_required
 def complaint(request, bill_id):
-    bill = get_object_or_404(Bill, id=bill_id)
+    bill = get_object_or_404(Bill, bill_id=bill_id)
     if(request.method == "POST"):
         print(request.POST)
         print(request.user)
@@ -76,13 +83,13 @@ def complaint(request, bill_id):
 
 @login_required
 def transaction(request, bill_id):
-    bill_object = get_object_or_404(Bill, id=bill_id)
+    bill_object = get_object_or_404(Bill, bill_id=bill_id)
     if(request.method == "POST"):
         print(request.POST.get('remarks'))
         myStr = datetime.now()
         print(request.POST.get('transaction_mode'))
         print(bill_id)
-        Bill.objects.filter(id=bill_id).update(
+        Bill.objects.filter(bill_id=bill_id).update(
             status='PAID', payment_mode=request.POST.get('transaction_mode'), paid_on=myStr)
 
         return redirect('user-home')

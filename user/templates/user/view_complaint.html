@@ -1,0 +1,22 @@
+{% extends "user/base.html" %}
+{% block content%}
+{%csrf_token%}
+{%if user.is_authenticated %}
+{%for complaint in complaints%}
+<div class="card">
+      <div class="card-body">
+            <h5 class="card-title">Bill Id - <strong>{{complaint.bill_id.bill_id}}</strong></h5>
+            <br>
+            <p class="card-text">Issue - <strong>{{complaint.issue}}</strong></p>
+        
+            <h6 class="card-text">Complaint Status-<strong>{{complaint.status}}</strong></h6>
+            
+            
+      </div>
+</div>
+{%endfor%}
+{%else%}
+<p>Already Have an account?<a class="nav-item nav-link" href="{% url 'login'%}">Login</a></p>
+<p>Don't have an account?<a class="nav-item nav-link" href="{% url 'register'%}">Register</a></p>
+{%endif%}
+{%endblock content %}

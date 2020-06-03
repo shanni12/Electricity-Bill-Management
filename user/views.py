@@ -68,6 +68,7 @@ def complaint(request, bill_id):
             complaint = Complaint.objects.create(bill_id=bill, issue=request.POST.get(
                 'issue', 'shakjnd ned'), user=request.user)
             complaint.save()
+            messages.success(request, f'Complaint raised Successfully!')
         except Exception as e:
             print(e)
         return redirect('user-home')
@@ -91,7 +92,7 @@ def transaction(request, bill_id):
         print(bill_id)
         Bill.objects.filter(bill_id=bill_id).update(
             status='PAID', payment_mode=request.POST.get('transaction_mode'), paid_on=myStr)
-
+        messages.success(request, f'Bill Paid!')
         return redirect('user-home')
 
     return render(request, 'user/transaction.html', {'bill_id': bill_id, 'bill_amount': bill_object.amount, 'bill_units': bill_object.amount/5})

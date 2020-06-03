@@ -12,12 +12,12 @@ class Bill(models.Model):
         ('NOT PAID', 'NOT PAID')
     ]
 
-    bill_id = models.UUIDField(primary_key=True, default=uuid.uuid4(),editable=False
+    bill_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     units = models.IntegerField()
     amount = models.IntegerField()
-    generated_on = models.DateField()
+    generated_on = models.DateField(auto_now_add=True,editable=True)
     paid_on = models.DateField(blank=True, null=True)
     remarks = models.CharField(max_length=300, null=True, blank=True)
     status = models.CharField(

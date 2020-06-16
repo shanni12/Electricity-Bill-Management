@@ -1,0 +1,27 @@
+{% extends "user/base.html" %}
+{% block content%}
+<div class="content-section">
+    <form method="POST">
+         {%csrf_token%}
+         <fieldset class="form-group">
+             <legend class="border-bottom mb-4">Meter Id</legend>
+             <div class="container">
+        
+                <br>
+                 <h5>Enter Meter Id</h5>
+                <br>
+                
+                <input type="text" name="meter">
+                <br>
+                <br>
+                 <button class="btn btn-outline-info" type="submit">Submit</button>
+                  
+    
+              </div>
+             
+         </fieldset>
+         
+    </form>
+    
+</div>
+{%endblock content%}

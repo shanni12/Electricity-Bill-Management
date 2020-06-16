@@ -4,6 +4,9 @@ from django.contrib import messages
 from .models import Complaint, Bill
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+import json
+
 # Create your views here.
 # bills = [{'id': 'shaja452',
 #           'units': 20,
@@ -39,14 +42,24 @@ def register(request):
 
 @login_required
 def home(request):
+    if(request.method=="POST"):
+        bills_objects=Bill.objects.filter(meter_id=request.POST.get('meter')).order_by('-generated_on')
+        serialized_bills_data = json.loads(serializers.serialize('json', bills_objects))
+        bills = [{"bill_id": serialized_bill_data['pk'], **serialized_bill_data['fields']} for serialized_bill_data in serialized_bills_data]
+        print(bills)
+        bills_js=[{"bill_id": serialized_bill_data['pk'], "status":serialized_bill_data['fields']['status']} for serialized_bill_data in serialized_bills_data]
+        print(bills_js)
+        return render(request,'user/home.html',{'bills':bills,'bills_js': bills_js})
+        
+    #bills = Bill.objects.order_by('-generated_on')
 
-    bills = Bill.objects.filter(user=request.user).order_by('-generated_on')
+    #return render(request, 'user/home.html', {'bills': bills})
+    return render(request,'user/meter.html')
 
-    return render(request, 'user/home.html', {'bills': bills})
 
 @login_required
 def view_complaints(request):
-
+    print(request)
     complaints = Complaint.objects.filter(user=request.user)
 
     return render(request, 'user/view_complaint.html', {'complaints': complaints})
@@ -59,6 +72,7 @@ def about(request):
 @login_required
 def complaint(request, bill_id):
     bill = get_object_or_404(Bill, bill_id=bill_id)
+    print(bill)
     if(request.method == "POST"):
         print(request.POST)
         print(request.user)
@@ -66,12 +80,15 @@ def complaint(request, bill_id):
 
         try:
             complaint = Complaint.objects.create(bill_id=bill, issue=request.POST.get(
-                'issue', 'shakjnd ned'), user=request.user)
+                'issue', 'shakjnd ned'), meter_id=bill.meter_id,user=request.user)
             complaint.save()
             messages.success(request, f'Complaint raised Successfully!')
         except Exception as e:
             print(e)
-        return redirect('user-home')
+        bills=Bill.objects.filter(meter_id=bill.meter_id).order_by('-generated_on')
+       
+        return render(request,'user/home.html',{'bills':bills})
+    
         # form = ComplaintForm(request.POST)
         # if form.is_valid():
         #     form.save()
@@ -93,9 +110,10 @@ def transaction(request, bill_id):
         Bill.objects.filter(bill_id=bill_id).update(
             status='PAID', payment_mode=request.POST.get('transaction_mode'), paid_on=myStr)
         messages.success(request, f'Bill Paid!')
-        return redirect('user-home')
+        bills=Bill.objects.filter(meter_id=bill_object.meter_id).order_by('-generated_on')
+        return render(request,'user/home.html',{'bills':bills})
 
-    return render(request, 'user/transaction.html', {'bill_id': bill_id, 'bill_amount': bill_object.amount, 'bill_units': bill_object.amount/5})
+    return render(request, 'user/transaction.html', {'bill_id': bill_id, 'bill_amount': bill_object.amount, 'bill_units': bill_object.units})
 
 
 def handler404(request, exception):

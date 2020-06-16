@@ -2,21 +2,31 @@
 {% block content%}
 {%csrf_token%}
 {%if user.is_authenticated %}
+<select name="" id="dropdown">
+      <option value="" selected>All</option>
+      <option id="paid" value="paid">Paid</option>
+      <option id="unpaid" value="unpaid">Unpaid</option>
+</select>
+
 {%for bill in bills%}
-<div class="card">
+<div class="card" id={{bill.bill_id}}>
       <div class="card-body">
             <h5 class="card-title">Bill Id - <strong>{{bill.bill_id}}</strong></h5>
             <h5 class="card-title">Units - <strong>{{bill.units}}</strong></h5>
-            <h6 class="card-text">Amount - <strong>{{bill.amount}}</strong></h6>
             <p class="card-text">Generated on - <strong>{{bill.generated_on}}</strong></p>
+            <h6 class="card-text" id="amount">Amount - <strong>{{bill.amount}}</strong></h6>
             {%if bill.status == "NOT PAID" %}
+            
+           
             <a href="{% url 'transaction' bill_id=bill.bill_id %}" class="card-link">Pay Bill</a>
             <a class="card-link" href="{% url 'complaint' bill_id=bill.bill_id%}">Complaint</a>
             {%else%}
+            
             <p class="card-text">Paid on - <strong> {{bill.paid_on}} </strong> </p>
             <p class="card-text">Paid through - <strong>{{bill.payment_mode}}</strong></p>
             {%endif%}
-
+           
+           
       </div>
 </div>
 {%endfor%}
@@ -24,4 +34,43 @@
 <p>Already Have an account?<a class="nav-item nav-link" href="{% url 'login'%}">Login</a></p>
 <p>Don't have an account?<a class="nav-item nav-link" href="{% url 'register'%}">Register</a></p>
 {%endif%}
+
+{{bills_js|json_script:"all_bills"}}
+
+<script>
+      var bills_data = JSON.parse(document.getElementById('all_bills').textContent)
+
+      document.getElementById("dropdown").onchange = function () {
+            value = document.getElementById("dropdown").value;
+
+            console.log(value)
+
+            if (value === "paid") {
+
+                  bills_data.forEach(item => {
+                        console.log(item)
+                        if (item.status != "PAID") {
+                              document.getElementById(item.bill_id).hidden = true;
+                        } else {
+                              document.getElementById(item.bill_id).hidden = false;
+                        }
+                  });
+            } else if (value === "unpaid") {
+                  bills_data.forEach(item => {
+                        if (item.status != "NOT PAID") {
+
+                              document.getElementById(item.bill_id).hidden = true;
+                        } else {
+                              document.getElementById(item.bill_id).hidden = false;
+                        }
+                  });
+            } else {
+                  bills_data.forEach(item => {
+
+                        document.getElementById(item.bill_id).hidden = false;
+                  })
+            }
+
+      }
+</script>
 {%endblock content %}

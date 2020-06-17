@@ -2,6 +2,7 @@
 {% block content%}
 {%csrf_token%}
 {%if user.is_authenticated %}
+{% if complaints %}
 {%for complaint in complaints%}
 <div class="card">
       <div class="card-body">
@@ -18,5 +19,10 @@
 {%else%}
 <p>Already Have an account?<a class="nav-item nav-link" href="{% url 'login'%}">Login</a></p>
 <p>Don't have an account?<a class="nav-item nav-link" href="{% url 'register'%}">Register</a></p>
+{%endif%}
+{%else%}
+<div>
+      <h2>No Complaints To show</h2>
+</div>
 {%endif%}
 {%endblock content %}

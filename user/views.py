@@ -5,8 +5,11 @@ from .models import Complaint, Bill
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
-import json
 
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
+import json
 # Create your views here.
 # bills = [{'id': 'shaja452',
 #           'units': 20,
@@ -38,7 +41,21 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'user/register.html', {'form': form})
-
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'user/change_password.html', {
+        'form': form
+    })
 
 @login_required
 def home(request):

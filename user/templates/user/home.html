@@ -1,8 +1,10 @@
 {% extends "user/base.html" %}
 {% block content%}
 {%csrf_token%}
+{%if bills %}
+
 {%if user.is_authenticated %}
-<select name="" id="dropdown">
+<select name="" id="dropdown" style="padding: 7px">
       <option value="" selected>All</option>
       <option id="paid" value="paid">Paid</option>
       <option id="unpaid" value="unpaid">Unpaid</option>
@@ -34,8 +36,14 @@
 <p>Already Have an account?<a class="nav-item nav-link" href="{% url 'login'%}">Login</a></p>
 <p>Don't have an account?<a class="nav-item nav-link" href="{% url 'register'%}">Register</a></p>
 {%endif%}
+{%else%}
+<div>
+     <strong><h3 style="color: red">No bills related to this Meter-Id</h3></strong> 
+</div>
 
+{%endif%}
 {{bills_js|json_script:"all_bills"}}
+
 
 <script>
       var bills_data = JSON.parse(document.getElementById('all_bills').textContent)
@@ -73,4 +81,5 @@
 
       }
 </script>
+
 {%endblock content %}

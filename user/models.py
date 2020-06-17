@@ -5,6 +5,8 @@ import uuid
 # Create your models here.
 class Meter(models.Model):
     meter_id=models.CharField(primary_key=True,max_length=300)
+    brand_name=models.CharField(max_length=100,blank=True,null=True)
+    modelnumber=models.CharField(max_length=100,blank=True,null=True)
 class House(models.Model):
     meter_id=models.ForeignKey(Meter,on_delete=models.CASCADE)
     house_no=models.CharField(max_length=200)

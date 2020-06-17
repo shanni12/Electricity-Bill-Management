@@ -10,15 +10,20 @@
            </fieldset>
            <div class="form-group">
                <button class="btn btn-outline-info" type="submit">Log in</button>
+               <small class="text-muted ml-2"><a href="{% url 'password_reset' %}">Forgot Password?</a></small>
            </div>
       </form>
       <div class="border-top pt-3">
+        <div class="row">
+            <div class="col-md-6"><a href="{% url 'admin:login'%}" class="ml-2" style="word-wrap: wrap;">Employee Login</a>
+            </div>
+            <div class="col-md-6" style="text-align: end;"><small class="text-muted" style="margin:0;">Need An Account?
+                <a href="{% url 'register'%}" class="ml-2">Sign up</a>
+             </small></div>
+          </div>
+           
         
-            <a href="{% url 'admin:login'%}" class="ml-2" style="word-wrap: wrap;">Employee Login</a>
-       
-           <small class="text-muted">Need An Account?
-              <a href="{% url 'register'%}" class="ml-2">Sign up</a>
-           </small>
+           
           
       </div>
   </div>

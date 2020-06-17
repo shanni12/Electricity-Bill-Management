@@ -9,5 +9,9 @@ def run():
     unpaid_bills = Bill.objects.filter(status='NOT PAID')
     # Delete questions
     for bill in unpaid_bills:
-        if(timezone.now()-timedelta(seconds=3)>bill.generated_on)
-               bill.update(bill.amount=bill.amount+10)
+        print(bill.generated_on)
+        print((datetime.now().date()-bill.generated_on).days)
+        if(datetime.now().date()-timedelta(days=1)>bill.generated_on):
+            bill.amount = bill.amount + 10*((datetime.now().date()-bill.generated_on).days)
+        bill.save()
+        #bill.update(amount=bill.amount+10)
